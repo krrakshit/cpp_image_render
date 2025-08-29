@@ -1,8 +1,6 @@
 #ifndef VEC3_H
 #define VEC3_H
-
-#include <cmath>
-#include <iostream>
+ 
 
 class vec3 {
   public:
@@ -66,10 +64,6 @@ using point3 = vec3;
 
 // Vector Utility Functions
 
-inline std::ostream& operator<<(std::ostream& out, const vec3& v) {
-    return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
-}
-
 inline vec3 operator+(const vec3& u, const vec3& v) {
     return vec3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
 }
@@ -122,7 +116,7 @@ inline vec3 random_unit_vector() {
     while (true) {
         auto p = vec3::random(-1,1);
         auto lensq = p.length_squared();
-        if (1e-160 < lensq && lensq <= 1)
+        if (1e-160 < lensq && lensq <= 1.0)
             return p / sqrt(lensq);
     }
 }
@@ -139,12 +133,12 @@ inline vec3 reflect(const vec3& v, const vec3& n) {
     return v - 2*dot(v,n)*n;
 }
 
-
 inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
     auto cos_theta = std::fmin(dot(-uv, n), 1.0);
     vec3 r_out_perp =  etai_over_etat * (uv + cos_theta*n);
     vec3 r_out_parallel = -std::sqrt(std::fabs(1.0 - r_out_perp.length_squared())) * n;
     return r_out_perp + r_out_parallel;
 }
+
 
 #endif
